@@ -10,9 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -20,46 +18,61 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useToast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
+import { newFormSchema } from "@/validators/newform";
 import React, { use, useState } from "react"
 
-const FormSchema = z.object({
-    name: z.string().min(1, {
-        message: "Name is required"
-    }),
-    description: z.string().optional(),
-});
+// const newFormSchema = z.object({
+//     name: z.string().min(1, {
+//         message: "Name is required"
+//     }),
+//     description: z.string().optional(),
+// });
+
+type Input = z.infer<typeof newFormSchema>;
+
 
 type NewFormProps = {
-    onSubmit: (values: z.infer<typeof FormSchema>) => void | Promise<void>;
+    onSubmit: (values: Input) => void | Promise<void>;
 }
+
+
 
 export const Forms = () => {
     const { data: sessionData } = useSession();
     const { toast } = useToast()
+
+
 
     const { data: forms, refetch: refetchForms } = api.form.getAll.useQuery(
         undefined,
         {
             enabled: !!sessionData?.user,
         }
-    )
-    const onSubmit = async (values: z.infer<typeof FormSchema>) => {
-        // await api.form.create.mutation(values);
+    );
+
+    const createForm = api.form.create.useMutation({
+        onSuccess: () => {
+            void refetchForms();
+        }
+    });
+    const onSubmit = async (values: Input) => {
         console.log("creating form")
+        createForm.mutate({
+            name: values.name,
+            description: values.description,
+        });
         toast({
             title: "You submitted the following values:",
             description: (
@@ -68,7 +81,6 @@ export const Forms = () => {
                 </pre>
             ),
         })
-        refetchForms();
     }
 
 
@@ -85,7 +97,7 @@ export const Forms = () => {
                 <NewForm onSubmit={onSubmit} />
             ) : (<>{
                 forms?.map((form) => (
-                    <Card className="w-64 h-96 mb-4 mx-4">
+                    <Card key={form.id} className="w-64 h-96 mb-4 mx-4">
                         <CardHeader>
                             <CardTitle>{form.name}</CardTitle>
                             <CardDescription>Card Description</CardDescription>
@@ -111,8 +123,10 @@ export const Forms = () => {
 const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
     const [isDialogOpen, setDialogOpen] = useState(false);
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
+
+
+    const form = useForm<Input>({
+        resolver: zodResolver(newFormSchema),
         defaultValues: {
             name: "",
             description: "",
@@ -121,14 +135,23 @@ const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
 
     const handleSubmit = form.handleSubmit(
         async (values) => {
-            await onSubmit(values);
-            // Close the dialog if there are no errors
-            if (Object.keys(form.formState.errors).length === 0) {
-                form.reset();
-                setDialogOpen(false);
+            console.log("Form Submission Started", values);
+            try {
+                console.log("Form Submitted", values);
+                if (Object.keys(form.formState.errors).length === 0) {
+                    console.log("No errors, resetting form");
+                    await onSubmit(values);
+                    form.reset();
+                    setDialogOpen(false);
+                } else {
+                    console.log("Form has errors", form.formState.errors);
+                }
+            } catch (error) {
+                console.error("Error during form submission", error);
             }
         }
     );
+
 
     return (
         <div className="mb-4 mx-4">
