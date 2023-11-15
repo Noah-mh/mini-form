@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "cockroachdb"
     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -14,16 +14,57 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Form {
+    id          String   @id @default(cuid())
+    name        String
+    description String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdBy   User       @relation(fields: [createdById], references: [id])
     createdById String
+    questions   Question[]
+    responses   Response[]
 
     @@index([name])
+}
+
+model Question {
+    id        String       @id @default(cuid())
+    formId    String
+    form      Form         @relation(fields: [formId], references: [id])
+    text      String
+    type      QuestionType
+    options   Option[]
+    responses Response[]
+}
+
+model Option {
+    id         String   @id @default(cuid())
+    questionId String
+    question   Question @relation(fields: [questionId], references: [id])
+    text       String
+}
+
+model Response {
+    id         String   @id @default(cuid())
+    questionId String
+    question   Question @relation(fields: [questionId], references: [id])
+    formId     String
+    form       Form     @relation(fields: [formId], references: [id])
+    value      Json
+}
+
+enum QuestionType {
+    CHECKBOX
+    MULTIPLE_CHOICE
+    LINEAR_SCALE
+    DROPDOWN
+    FILE_INPUT
+    TEXT
+    DATE_TIME
+    EMAIL
+    PHONE_NUMBER
 }
 
 // Necessary for Next auth
@@ -33,12 +74,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String? @db.String()
+    access_token      String? @db.String()
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String? @db.String()
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -61,7 +102,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    forms         Form[]
 }
 
 model VerificationToken {
