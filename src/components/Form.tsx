@@ -31,14 +31,7 @@ import { useForm } from "react-hook-form"
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { newFormSchema } from "@/validators/newform";
-import React, { use, useState } from "react"
-
-// const newFormSchema = z.object({
-//     name: z.string().min(1, {
-//         message: "Name is required"
-//     }),
-//     description: z.string().optional(),
-// });
+import React, { useState } from "react"
 
 type Input = z.infer<typeof newFormSchema>;
 
