@@ -83,6 +83,11 @@ export const Forms = () => {
         })
     }
 
+    if (!sessionData?.user) return (
+        <div>
+            Please sign in to view your forms
+        </div>
+    )
 
 
     if (!forms) return (
