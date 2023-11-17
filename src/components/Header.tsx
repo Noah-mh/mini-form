@@ -1,4 +1,7 @@
+//import for library
 import { signIn, signOut, useSession } from "next-auth/react";
+
+//import for ui
 import {
     Avatar,
     AvatarFallback,

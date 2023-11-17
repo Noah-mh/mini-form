@@ -1,4 +1,10 @@
-import { z } from "zod";
+//import for library
+import React from "react"
+import { useSession } from "next-auth/react";
+import { api } from "@/utils/api";
+import Link from "next/link";
+
+//import for ui
 import {
     Card,
     CardContent,
@@ -7,40 +13,41 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { Button } from "./ui/button";
 
-import { api } from "@/utils/api";
-import { useSession } from "next-auth/react";
-import { newFormSchema } from "@/validators/newform";
-import React, { useState } from "react"
+//import for components
+import { NewForm } from "./NewForm";
 
-type Input = z.infer<typeof newFormSchema>;
-
-
-type NewFormProps = {
-    onSubmit: (values: Input) => void | Promise<void>;
-}
+//import for types
+import { QuestionType } from "@prisma/client";
+import { FormInputType } from "@/types/form_data.type";
 
 
+export const questions = [
+    { text: "Name", type: QuestionType.TEXT },
+    { text: "Email Address", type: QuestionType.EMAIL },
+    { text: "Phone Number", type: QuestionType.PHONE_NUMBER },
+    { text: "Upload your CV", type: QuestionType.FILE_INPUT },
+    {
+        text: "Select One of the options below",
+        type: QuestionType.MULTIPLE_CHOICE,
+    },
+    { text: "What do you prefer to be contact?", type: QuestionType.CHECKBOX },
+    { text: "Select one", type: QuestionType.DROPDOWN },
+    {
+        text: "What is your preferred time to be contacted?",
+        type: QuestionType.TIME,
+    },
+    {
+        text: "What is your preferred day to be contacted?",
+        type: QuestionType.DATE,
+    },
+    {
+        text: "Rate the experience you had with us",
+        type: QuestionType.LINEAR_SCALE,
+    },
+];
 
 export const Forms = () => {
     const { data: sessionData } = useSession();
@@ -60,20 +67,76 @@ export const Forms = () => {
             void refetchForms();
         }
     });
-    const onSubmit = async (values: Input) => {
+
+    const deleteForm = api.form.delete.useMutation({
+        onSuccess: () => {
+            void refetchForms();
+        }
+    });
+
+    const initializeForm = api.form.bulkCreateQuestion.useMutation({});
+
+
+
+
+    const onSubmit = async (values: FormInputType) => {
         console.log("creating form")
-        createForm.mutate({
-            name: values.name,
-            description: values.description,
-        });
-        toast({
-            title: "You submitted the following values:",
-            description: (
-                <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-                </pre>
-            ),
-        })
+        try {
+            const result = await createForm.mutateAsync({
+                name: values.name,
+                description: values.description,
+            });
+            if (result) {
+                const questionWithFormId = questions.map((question) => ({
+                    ...question,
+                    formId: result.id,
+                }));
+                await initializeForm.mutateAsync({ questions: questionWithFormId });
+            }
+            toast({
+                title: "You submitted the following values:",
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+                    </pre>
+                ),
+            })
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(error, null, 2)}</code>
+                    </pre>
+                ),
+            })
+        }
+    }
+
+    const handleDelete = async (id: string, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+        console.log("deleting form")
+        try {
+            await deleteForm.mutateAsync({ id: id });
+            toast({
+                title: "Form Deleted",
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(id, null, 2)}</code>
+                    </pre>
+                ),
+            })
+        } catch (error: any) {
+            console.log(error)
+            toast({
+                title: "Error",
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(error, null, 2)}</code>
+                    </pre>
+                ),
+            })
+        }
     }
 
     if (!sessionData?.user) return (
@@ -93,118 +156,33 @@ export const Forms = () => {
         <div className="mx-4 flex flex-wrap p-4">
             {forms?.length == 0 ? (
                 <NewForm onSubmit={onSubmit} />
-            ) : (<>{
-                forms?.map((form) => (
-                    <Card key={form.id} className="w-64 h-96 mb-4 mx-4">
-                        <CardHeader>
-                            <CardTitle>{form.name}</CardTitle>
-                            <CardDescription>Card Description</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p>Card Content</p>
-                        </CardContent>
-                        <CardFooter>
-                            <p>Card Footer</p>
-                        </CardFooter>
-                    </Card>
-                ))}
+            ) : (
+                <>
+                    {forms?.map((form, index) => (
+                        <Link href={{
+                            pathname: `/formdetails/[formId]`,
+                            query: { formId: form.id },
+                        }} key={form.id}>
+                            <Card key={index} className="w-64 h-36 mb-4 mx-4">
+                                <CardHeader>
+                                    <CardTitle>{form.name}</CardTitle>
+                                    <CardDescription>{form.description}</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-sm">Last Updated : <br></br>{form.updatedAt.toLocaleString()}</p>
+                                </CardContent>
+                                <CardFooter>
+                                    <Button onClick={(event) => { handleDelete(form.id, event) }}>Delete</Button>
+                                </CardFooter>
+                            </Card>
+                        </Link>
+                    ))}
 
-                <NewForm onSubmit={onSubmit} />
-            </>
+                    <NewForm onSubmit={onSubmit} />
+                </>
             )
             }
 
         </div >
-    )
-}
-
-const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
-    const [isDialogOpen, setDialogOpen] = useState(false);
-
-
-
-    const form = useForm<Input>({
-        resolver: zodResolver(newFormSchema),
-        defaultValues: {
-            name: "",
-            description: "",
-        },
-    })
-
-    const handleSubmit = form.handleSubmit(
-        async (values) => {
-            console.log("Form Submission Started", values);
-            try {
-                console.log("Form Submitted", values);
-                if (Object.keys(form.formState.errors).length === 0) {
-                    console.log("No errors, resetting form");
-                    await onSubmit(values);
-                    form.reset();
-                    setDialogOpen(false);
-                } else {
-                    console.log("Form has errors", form.formState.errors);
-                }
-            } catch (error) {
-                console.error("Error during form submission", error);
-            }
-        }
-    );
-
-
-    return (
-        <div className="mb-4 mx-4">
-            <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                <DialogTrigger asChild className="w-64 h-96">
-                    <Button variant="ghost">
-                        <Card className="w-64 h-96">
-                            <CardContent className="flex justify-center items-center h-full">
-                                <p className="">+</p>
-                            </CardContent>
-                        </Card>
-                    </Button>
-                </DialogTrigger>
-
-
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Add New Form</DialogTitle>
-                    </DialogHeader>
-                    <Form {...form}>
-                        <form onSubmit={handleSubmit} className="space-y-8">
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Please enter the name of the form"{...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-
-                            />
-                            <FormField
-                                control={form.control}
-                                name="description"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Description</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Please enter the description of the form"{...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-
-                            />
-                            <Button type="submit">Save</Button>
-                        </form>
-                    </Form>
-                </DialogContent>
-
-            </Dialog>
-        </div>
     )
 }
