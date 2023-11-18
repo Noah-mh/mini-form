@@ -38,7 +38,7 @@ export const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
                 </DialogTrigger>
 
 
-                <DiaLogContentFC label="Add New Form" onSubmit={onSubmit} setDialogOpen={setDialogOpen} setFormInfo={setFormInfo} />
+                <DiaLogContentFC label="Add New Form" onSubmit={onSubmit} setDialogOpen={setDialogOpen} formInfo={formInfo} setFormInfo={setFormInfo} />
             </Dialog>
         </div>
     )

@@ -215,7 +215,7 @@ const Forms = () => {
                                     </DialogTrigger>
                                 </ContextMenuItem>
                                 <ContextMenuItem>
-                                    <Button variant="ghost" onClick={async (event) => { handleDelete(form.id, event) }}>
+                                    <Button variant="ghost" onClick={async (event) => { await handleDelete(form.id, event) }}>
                                         Delete
                                     </Button>
                                 </ContextMenuItem>
