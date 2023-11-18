@@ -18,6 +18,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -27,6 +28,11 @@ const config = {
       {
         protocol: "https",
         hostname: "utfs.io",
+        port: "",
+      },
+      {
+        protocol: "https",
+        hostname: "tailwindui.com",
         port: "",
       },
     ],

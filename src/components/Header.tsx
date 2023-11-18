@@ -1,5 +1,6 @@
 //import for library
 import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 //import for ui
 import {
@@ -27,7 +28,7 @@ const Header = () => {
                     <div className="flex lg:flex-1">
                         <a href="" className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
-                            <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
+                            <Image className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" width={400} height={400} alt="" />
                         </a>
                     </div>
                     <div className="flex flex-col items-center justify-center gap-4">

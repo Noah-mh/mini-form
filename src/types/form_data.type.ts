@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { newFormSchema } from "@/validators/form_schema.type";
 import type { Control } from "react-hook-form";
-import createDynamicSchema from "@/utils/createDynamicSchema";
+import type createDynamicSchema from "@/utils/createDynamicSchema";
 import type { Form, Question, Response } from "@prisma/client";
 
 //input type for creating a new form

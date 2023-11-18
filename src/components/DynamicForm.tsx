@@ -105,16 +105,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
                     responses: arrayOfResponse,
                 });
             }
-        } catch (error: any) {
+        } catch (error) {
             toast({
                 title: "Error",
-                description: error.message,
             })
         }
     }
 
-    const onTrigger = (values: z.infer<typeof dynamicSchema>) => {
-        form.trigger();
+    const onTrigger = async (values: z.infer<typeof dynamicSchema>) => {
+        await form.trigger();
         console.log("triggered")
         console.log(values);
         toast({

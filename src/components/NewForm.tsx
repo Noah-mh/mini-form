@@ -12,10 +12,12 @@ import {
     CardContent,
 } from "@/components/ui/card"
 
-//import for types
-import { NewFormProps } from "@/types/form_data.type";
+//import for components
 import DiaLogContentFC from "@/components/DialogContentFC";
-import { Form } from "@prisma/client";
+
+//import for types
+import type { NewFormProps } from "@/types/form_data.type";
+import type { Form } from "@prisma/client";
 
 
 export const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {

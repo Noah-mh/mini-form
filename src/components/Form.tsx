@@ -27,12 +27,13 @@ import {
 
 
 //import for components
-import { NewForm } from "./NewForm";
+import { NewForm } from "@/components/NewForm";
+import DiaLogContentFC from "@/components/DialogContentFC";
 
 //import for types
-import { Form, QuestionType } from "@prisma/client";
-import { FormInfoInputType } from "@/types/form_data.type";
-import DiaLogContentFC from "@/components/DialogContentFC";
+import { type Form, QuestionType } from "@prisma/client";
+import type { FormInfoInputType } from "@/types/form_data.type";
+
 
 
 export const questions = [
@@ -127,10 +128,9 @@ const Forms = () => {
                 await initializeForm.mutateAsync({ questions: questionWithFormId });
             }
 
-        } catch (error: any) {
+        } catch (error) {
             toast({
                 title: "Error creating form",
-                description: error.message,
             })
         }
     }
@@ -144,10 +144,9 @@ const Forms = () => {
                 description: values.description,
             });
 
-        } catch (error: any) {
+        } catch (error) {
             toast({
                 title: "Error updating form",
-                description: error.message,
             })
         }
     }
@@ -160,11 +159,10 @@ const Forms = () => {
             toast({
                 title: "Form Deleted",
             })
-        } catch (error: any) {
+        } catch (error) {
             console.log(error)
             toast({
                 title: "Error deleting form",
-                description: error.message,
             })
         }
     }
@@ -217,7 +215,7 @@ const Forms = () => {
                                     </DialogTrigger>
                                 </ContextMenuItem>
                                 <ContextMenuItem>
-                                    <Button variant="ghost" onClick={(event) => { handleDelete(form.id, event) }}>
+                                    <Button variant="ghost" onClick={async (event) => { handleDelete(form.id, event) }}>
                                         Delete
                                     </Button>
                                 </ContextMenuItem>

@@ -1,5 +1,5 @@
 //import for library
-import React, { ComponentProps } from 'react';
+import React, { type ComponentProps } from 'react';
 
 //import for ui
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
