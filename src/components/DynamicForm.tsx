@@ -55,8 +55,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
         onSuccess: () => {
 
             toast({
-                title: "Response created",
-                description: "Your response was successfully created",
+                title: "Successfully Submitted",
             })
         },
         onError: (error) => {
@@ -71,8 +70,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
         onSuccess: () => {
 
             toast({
-                title: "Response updated",
-                description: "Your response was successfully updated",
+                title: "Successfully Updated",
             })
         },
         onError: (error) => {
@@ -99,42 +97,18 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
         console.log(arrayOfResponseWithFormId);
         try {
             if (Object.keys(defaultValues).length === 0) {
-                const result = await createResponse.mutateAsync({
+                await createResponse.mutateAsync({
                     responses: arrayOfResponseWithFormId,
                 });
-                if (result) {
-                    toast({
-                        title: "Success",
-                        description: (
-                            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                                <code className="text-white">{JSON.stringify(result, null, 2)}</code>
-                            </pre>
-                        ),
-                    })
-                }
             } else {
-                const result = await updateResponse.mutateAsync({
+                await updateResponse.mutateAsync({
                     responses: arrayOfResponse,
                 });
-                if (result) {
-                    toast({
-                        title: "Success",
-                        description: (
-                            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                                <code className="text-white">{JSON.stringify(result, null, 2)}</code>
-                            </pre>
-                        ),
-                    })
-                }
             }
-        } catch (error) {
+        } catch (error: any) {
             toast({
                 title: "Error",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(error, null, 2)}</code>
-                    </pre>
-                ),
+                description: error.message,
             })
         }
     }
@@ -160,7 +134,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
                 {questionsData.map((question) => renderDynamicInput(question, form.control))}
                 <div className="flex justify-between my-10" >
                     <Button type="submit">Submit</Button>
-                    <Button type="button" onClick={() => onTrigger(form.getValues())}>Trigger</Button></div>
+                    <Button type="button" onClick={() => onTrigger(form.getValues())}>Test Submit</Button></div>
             </form>
         </Form>
     )

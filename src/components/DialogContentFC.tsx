@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -23,11 +23,16 @@ import { Input } from "@/components/ui/input"
 import { newFormSchema } from "@/validators/form_schema.type";
 import { FormInfoInputType, DialogContextProps } from "@/types/form_data.type";
 
-export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo, isDialogOpen, setDialogOpen, onSubmit }) => {
+export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo, setDialogOpen, setFormInfo, onSubmit }) => {
+
+    useEffect(() => {
+        console.log("formInfo", formInfo);
+    }, [formInfo])
+
 
     let defaultFormInfo: { name: string; description: string | undefined } = {
         name: "",
-        description: undefined,
+        description: "" || undefined,
     };
 
     if (formInfo) {
@@ -41,7 +46,10 @@ export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo,
 
     const form = useForm<FormInfoInputType>({
         resolver: zodResolver(newFormSchema),
-        defaultValues: defaultFormInfo,
+        defaultValues: {
+            name: "",
+            description: "",
+        },
     })
 
     const handleSubmit = form.handleSubmit(
@@ -54,6 +62,7 @@ export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo,
                     await onSubmit(values, formInfo?.id);
                     form.reset();
                     setDialogOpen(false);
+                    setFormInfo(undefined);
                 } else {
                     console.log("Form has errors", form.formState.errors);
                 }
@@ -77,7 +86,7 @@ export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo,
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Please enter the name of the form"{...field} />
+                                    <Input placeholder={formInfo ? formInfo.name : "Please enter the name of the form"} {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -91,7 +100,7 @@ export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo,
                             <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Please enter the description of the form"{...field} />
+                                    <Input placeholder={formInfo ? (formInfo.description !== null && formInfo.description !== "" ? formInfo.description : "Please enter the description of the form") : "Please enter the description of the form"} {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

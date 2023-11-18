@@ -17,7 +17,7 @@ export type NewFormProps = {
 export type DialogContextProps = {
   label?: string;
   formInfo?: Form;
-  isDialogOpen: boolean;
+  setFormInfo: React.Dispatch<React.SetStateAction<Form | undefined>>;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: (
     values: FormInfoInputType,

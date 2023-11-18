@@ -1,5 +1,5 @@
 //import for library
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useSession } from "next-auth/react";
 import { api } from "@/utils/api";
 import Link from "next/link";
@@ -30,7 +30,7 @@ import {
 import { NewForm } from "./NewForm";
 
 //import for types
-import { QuestionType } from "@prisma/client";
+import { Form, QuestionType } from "@prisma/client";
 import { FormInfoInputType } from "@/types/form_data.type";
 import { DiaLogContentFC } from "./DialogContentFC";
 
@@ -65,6 +65,13 @@ export const Forms = () => {
     const { toast } = useToast()
 
     const [isDialogOpen, setDialogOpen] = useState(false);
+    const [formInfo, setFormInfo] = useState<Form | undefined>(undefined);
+
+    useEffect(() => {
+        if (formInfo !== undefined) {
+            setDialogOpen(true);
+        }
+    }, [formInfo]);
 
     const { data: forms, refetch: refetchForms } = api.form.getAll.useQuery(
         undefined,
@@ -82,6 +89,9 @@ export const Forms = () => {
     const updateForm = api.form.update.useMutation({
         onSuccess: () => {
             void refetchForms();
+            toast({
+                title: "Successfully updated form",
+            })
         }
     });
 
@@ -91,7 +101,13 @@ export const Forms = () => {
         }
     });
 
-    const initializeForm = api.form.bulkCreateQuestion.useMutation({});
+    const initializeForm = api.form.bulkCreateQuestion.useMutation({
+        onSuccess: () => {
+            toast({
+                title: "Successfully created form",
+            })
+        }
+    });
 
 
 
@@ -110,22 +126,11 @@ export const Forms = () => {
                 }));
                 await initializeForm.mutateAsync({ questions: questionWithFormId });
             }
+
+        } catch (error: any) {
             toast({
-                title: "You submitted the following values:",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-                    </pre>
-                ),
-            })
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(error, null, 2)}</code>
-                    </pre>
-                ),
+                title: "Error creating form",
+                description: error.message,
             })
         }
     }
@@ -133,34 +138,16 @@ export const Forms = () => {
     const onEditSubmit = async (values: FormInfoInputType, formId?: string,) => {
         console.log("creating form")
         try {
-            const result = await updateForm.mutateAsync({
+            await updateForm.mutateAsync({
                 id: formId!,
                 name: values.name,
                 description: values.description,
             });
-            if (result) {
-                const questionWithFormId = questions.map((question) => ({
-                    ...question,
-                    formId: result.id,
-                }));
-                await initializeForm.mutateAsync({ questions: questionWithFormId });
-            }
+
+        } catch (error: any) {
             toast({
-                title: "You submitted the following values:",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-                    </pre>
-                ),
-            })
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(error, null, 2)}</code>
-                    </pre>
-                ),
+                title: "Error updating form",
+                description: error.message,
             })
         }
     }
@@ -172,21 +159,12 @@ export const Forms = () => {
             await deleteForm.mutateAsync({ id: id });
             toast({
                 title: "Form Deleted",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(id, null, 2)}</code>
-                    </pre>
-                ),
             })
         } catch (error: any) {
             console.log(error)
             toast({
-                title: "Error",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(error, null, 2)}</code>
-                    </pre>
-                ),
+                title: "Error deleting form",
+                description: error.message,
             })
         }
     }
@@ -209,47 +187,47 @@ export const Forms = () => {
             {forms?.length == 0 ? (
                 <NewForm onSubmit={onSubmit} />
             ) : (
-                <>
+                <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
                     {forms?.map((form, index) => (
-                        <>
-                            <ContextMenu key={index}>
+                        <ContextMenu key={index}>
 
-                                <ContextMenuTrigger asChild>
-                                    <Link href={{
-                                        pathname: `/formdetails/[formId]`,
-                                        query: { formId: form.id },
-                                    }} key={form.id}>
-                                        <Card key={index} className="w-64 h-36 mb-4 mx-4">
-                                            <CardHeader>
-                                                <CardTitle>{form.name}</CardTitle>
-                                                <CardDescription>{form.description}</CardDescription>
-                                            </CardHeader>
-                                            <CardContent>
-                                                <p className="text-sm">Last Updated : <br></br>{form.updatedAt.toLocaleString()}</p>
-                                            </CardContent>
-                                        </Card>
-                                    </Link>
-                                </ContextMenuTrigger>
-                                <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                                    <ContextMenuContent>
-                                        <ContextMenuItem>
-                                            <DialogTrigger asChild >
-                                                <Button variant="ghost">
-                                                    Edit Form Info
-                                                </Button>
-                                            </DialogTrigger>
-                                        </ContextMenuItem>
-                                        <ContextMenuItem>
-                                            <Button variant="ghost" onClick={(event) => { handleDelete(form.id, event) }}>Delete</Button>
-                                        </ContextMenuItem>
-                                    </ContextMenuContent>
-                                    <DiaLogContentFC label="Edit Form Info" formInfo={form} onSubmit={onEditSubmit} isDialogOpen setDialogOpen={setDialogOpen} /></Dialog >
-                            </ContextMenu>
-                        </>
+                            <ContextMenuTrigger asChild>
+                                <Link href={{
+                                    pathname: `/formdetails/[formId]`,
+                                    query: { formId: form.id },
+                                }} key={form.id}>
+                                    <Card className="w-64 h-36 mb-4 mx-4">
+                                        <CardHeader>
+                                            <CardTitle>{form.name}</CardTitle>
+                                            <CardDescription>{form.description}</CardDescription>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-sm">Last Updated : <br></br>{form.updatedAt.toLocaleString()}</p>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
+                            </ContextMenuTrigger>
+
+                            <ContextMenuContent>
+                                <ContextMenuItem>
+                                    <DialogTrigger asChild >
+                                        <Button variant="ghost" onClick={() => setFormInfo(form)}>
+                                            Edit Form Info
+                                        </Button>
+                                    </DialogTrigger>
+                                </ContextMenuItem>
+                                <ContextMenuItem>
+                                    <Button variant="ghost" onClick={(event) => { handleDelete(form.id, event) }}>
+                                        Delete
+                                    </Button>
+                                </ContextMenuItem>
+                            </ContextMenuContent>
+
+                        </ContextMenu>
                     ))}
-
                     <NewForm onSubmit={onSubmit} />
-                </>
+                    <DiaLogContentFC label="Edit Form Info" formInfo={formInfo} onSubmit={onEditSubmit} setDialogOpen={setDialogOpen} setFormInfo={setFormInfo} />
+                </Dialog >
             )
             }
 

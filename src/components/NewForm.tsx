@@ -21,10 +21,12 @@ import { newFormSchema } from "@/validators/form_schema.type";
 import { FormInfoInputType } from "@/types/form_data.type";
 import { NewFormProps } from "@/types/form_data.type";
 import { DiaLogContentFC } from "./DialogContentFC";
+import { Form } from "@prisma/client";
 
 
 export const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
     const [isDialogOpen, setDialogOpen] = useState(false);
+    const [formInfo, setFormInfo] = useState<Form | undefined>(undefined);
 
     return (
         <div className="w-64 h-36">
@@ -40,7 +42,7 @@ export const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
                 </DialogTrigger>
 
 
-                <DiaLogContentFC label="Add New Form" onSubmit={onSubmit} isDialogOpen setDialogOpen={setDialogOpen} />
+                <DiaLogContentFC label="Add New Form" onSubmit={onSubmit} setDialogOpen={setDialogOpen} setFormInfo={setFormInfo} />
             </Dialog>
         </div>
     )
