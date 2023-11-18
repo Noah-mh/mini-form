@@ -3,7 +3,6 @@ import React from 'react';
 
 //import for ui
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 
 //import for types
 import { DynamicInputProps } from '@/types/form_data.type';

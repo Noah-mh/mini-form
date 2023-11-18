@@ -1,8 +1,5 @@
 //import for library
-import { z } from "zod";
 import React, { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 
 //import for ui
 import { Button } from "@/components/ui/button"
@@ -14,13 +11,10 @@ import {
     Card,
     CardContent,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 
 //import for types
-import { newFormSchema } from "@/validators/form_schema.type";
-import { FormInfoInputType } from "@/types/form_data.type";
 import { NewFormProps } from "@/types/form_data.type";
-import { DiaLogContentFC } from "./DialogContentFC";
+import { DiaLogContentFC } from "@/components/DialogContentFC";
 import { Form } from "@prisma/client";
 
 

@@ -48,12 +48,14 @@ const dynamicSchema = {
     .email(),
 
   DATE: z.string({
-    required_error: "date is required.",
+    required_error: "Please select a date.",
   }),
 
-  TIME: z.string().min(1, {
-    message: "Value is required",
-  }),
+  TIME: z
+    .string({
+      required_error: "Please select a timing.",
+    })
+    .min(1),
 
   LINEAR_SCALE: z
     .string({

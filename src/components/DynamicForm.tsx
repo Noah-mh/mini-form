@@ -2,7 +2,7 @@
 import { z } from "zod";
 import React, { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Control, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 
 //import for ui
 import { Button } from "@/components/ui/button"

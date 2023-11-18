@@ -21,8 +21,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({ endpoint, value, onChang
                     src={value}
                     alt="Upload"
                     className="rounded-full object-cover w-auto h-auto"
-                    width={500}
-                    height={500}
+                    width={600}
+                    height={600}
                 />
                 <button
                     onClick={() => onChange("")}

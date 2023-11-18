@@ -3,8 +3,8 @@ import { Question } from "@prisma/client";
 
 // Zod imports
 import { z } from "zod";
-import dynamicSchema from "@/schemas/dynamicFormInputs";
-import type { InputType } from "@/schemas/dynamicFormInputs";
+import dynamicSchema from "@/validators/dynamicFormInputs";
+import type { InputType } from "@/validators/dynamicFormInputs";
 
 /**
  * createDynamicSchema creates a z.object schema that is meant to be passed

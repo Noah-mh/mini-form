@@ -1,23 +1,18 @@
 //import for library
-import { z } from "zod";
 import React, { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { useSession } from "next-auth/react";
-//import for ui
-import { useToast } from "@/components/ui/use-toast";
+
+//import for api
+import { api } from "@/utils/api";
 
 //import for types
 import { type GetServerSidePropsContext } from "next/types";
-import { api } from "@/utils/api";
-
 import { FormDetailsProps } from "@/types/form_data.type";
+
+//import for components
 import DynamicForm from "@/components/DynamicForm";
 
 
 const FormDetails: React.FC<FormDetailsProps> = ({ formId }) => {
-    const { data: sessionData } = useSession();
-
     const { data: formInfo, isLoading } = api.form.getOne.useQuery({ id: formId })
 
     const { data: questionsData } = api.formDetails.getOne.useQuery(
