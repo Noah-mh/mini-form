@@ -1,5 +1,5 @@
 //import for Prisma types
-import { Question } from "@prisma/client";
+import type { Question } from "@prisma/client";
 
 // Zod imports
 import { z } from "zod";

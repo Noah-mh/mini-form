@@ -1,12 +1,12 @@
 //import for library
-import React, { useState } from "react"
+import React from "react"
 
 //import for api
 import { api } from "@/utils/api";
 
 //import for types
-import { type GetServerSidePropsContext } from "next/types";
-import { FormDetailsProps } from "@/types/form_data.type";
+import type { GetServerSidePropsContext } from "next/types";
+import type { FormDetailsProps } from "@/types/form_data.type";
 
 //import for components
 import DynamicForm from "@/components/DynamicForm";

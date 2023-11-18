@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { QuestionType } from "@prisma/client";
 
 export const responseRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
