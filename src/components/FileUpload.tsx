@@ -1,10 +1,14 @@
 import React from "react";
-import { UploadDropzone } from "@/utils/uploadthing";
-import "@uploadthing/react/styles.css";
-
-import { X } from "lucide-react";
 import Image from "next/image";
 
+//import for icons
+import { X } from "lucide-react";
+
+//import for components
+import { UploadDropzone } from "@/utils/uploadthing";
+
+//import for styles
+import "@uploadthing/react/styles.css";
 
 type FileUploadProps = {
     onChange: (url?: string) => void;
@@ -12,7 +16,7 @@ type FileUploadProps = {
     endpoint: "imageUpload";
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ endpoint, value, onChange }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ endpoint, value, onChange }) => {
     const fileType = value?.split(".").pop();
     if (value && fileType !== "pdf") {
         return (
@@ -45,3 +49,4 @@ export const FileUpload: React.FC<FileUploadProps> = ({ endpoint, value, onChang
             }} />
     );
 }
+export default FileUpload;

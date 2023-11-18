@@ -13,7 +13,7 @@ import {
 
 
 //import for types
-import { DynamicInputProps } from '@/types/form_data.type';
+import type { DynamicInputProps } from '@/types/form_data.type';
 import type { ComponentProps } from "react"
 
 const DropdownInput: React.FC<DynamicInputProps> = ({ control, question }) => (

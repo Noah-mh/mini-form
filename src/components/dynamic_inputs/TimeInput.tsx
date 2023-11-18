@@ -6,7 +6,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 
 //import for types
-import { DynamicInputProps } from '@/types/form_data.type';
+import type { DynamicInputProps } from '@/types/form_data.type';
 import type { ComponentProps } from "react"
 
 const TimeInput: React.FC<DynamicInputProps> = ({ control, question }) => (

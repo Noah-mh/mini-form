@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input"
 import { newFormSchema } from "@/validators/form_schema.type";
 import { FormInfoInputType, DialogContextProps } from "@/types/form_data.type";
 
-export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo, setDialogOpen, setFormInfo, onSubmit }) => {
+const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo, setDialogOpen, setFormInfo, onSubmit }) => {
 
     useEffect(() => {
         console.log("formInfo", formInfo);
@@ -113,3 +113,5 @@ export const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo,
         </DialogContent>
     )
 }
+
+export default DiaLogContentFC;

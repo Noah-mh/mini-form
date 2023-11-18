@@ -19,7 +19,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { DynamicInputProps } from "@/types/form_data.type"
+import type { DynamicInputProps } from "@/types/form_data.type"
 
 
 const DatePickerInput: React.FC<DynamicInputProps> = ({ control, question }) => {

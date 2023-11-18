@@ -14,7 +14,7 @@ import {
 
 //import for types
 import { NewFormProps } from "@/types/form_data.type";
-import { DiaLogContentFC } from "@/components/DialogContentFC";
+import DiaLogContentFC from "@/components/DialogContentFC";
 import { Form } from "@prisma/client";
 
 

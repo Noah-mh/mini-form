@@ -32,7 +32,7 @@ import { NewForm } from "./NewForm";
 //import for types
 import { Form, QuestionType } from "@prisma/client";
 import { FormInfoInputType } from "@/types/form_data.type";
-import { DiaLogContentFC } from "./DialogContentFC";
+import DiaLogContentFC from "@/components/DialogContentFC";
 
 
 export const questions = [
@@ -60,7 +60,7 @@ export const questions = [
     },
 ];
 
-export const Forms = () => {
+const Forms = () => {
     const { data: sessionData } = useSession();
     const { toast } = useToast()
 
@@ -234,3 +234,4 @@ export const Forms = () => {
         </div >
     )
 }
+export default Forms;

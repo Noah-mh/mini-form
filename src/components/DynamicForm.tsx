@@ -1,6 +1,6 @@
 //import for library
 import { z } from "zod";
-import React, { useState } from "react"
+import React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -12,7 +12,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 //import for types
-import { DynamicFormProps } from "@/types/form_data.type";
+import type { DynamicFormProps } from "@/types/form_data.type";
 
 //import for utils
 import { api } from "@/utils/api";

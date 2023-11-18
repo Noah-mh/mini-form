@@ -5,9 +5,10 @@ import React from 'react';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 
 //import for types
-import { DynamicInputProps } from '@/types/form_data.type';
-import type { ComponentProps } from "react"
-import { FileUpload } from '../FileUpload';
+import type { DynamicInputProps } from '@/types/form_data.type';
+
+//import for components
+import FileUpload from '@/components/FileUpload'
 
 const ImageInput: React.FC<DynamicInputProps> = ({ control, question }) => (
     <FormField key={question.id} control={control} name={question.id}

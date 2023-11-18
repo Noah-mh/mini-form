@@ -2,11 +2,11 @@
 import React from 'react';
 
 //import for ui
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 
 //import for types
-import { DynamicInputProps } from '@/types/form_data.type';
+import type { DynamicInputProps } from '@/types/form_data.type';
 
 
 

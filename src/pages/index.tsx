@@ -2,8 +2,8 @@
 import Head from "next/head";
 
 //import for components
-import { Header } from "@/components/Header";
-import { Forms } from "@/components/Form";
+import Header from "@/components/Header";
+import Forms from "@/components/Form";
 
 export default function Home() {
 

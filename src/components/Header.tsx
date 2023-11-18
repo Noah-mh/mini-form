@@ -17,7 +17,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export const Header = () => {
+const Header = () => {
     const { data: sessionData } = useSession();
 
     return (
@@ -65,3 +65,4 @@ export const Header = () => {
         </>
     )
 }
+export default Header;

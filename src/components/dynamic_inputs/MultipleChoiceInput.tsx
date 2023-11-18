@@ -6,7 +6,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 //import for types
-import { DynamicInputProps } from '@/types/form_data.type';
+import type { DynamicInputProps } from '@/types/form_data.type';
 
 
 const MultipleChoiceInput: React.FC<DynamicInputProps> = ({ control, question }) => {
