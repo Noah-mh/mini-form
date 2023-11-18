@@ -1,5 +1,5 @@
 //import for library
-import { z } from "zod";
+import type { z } from "zod";
 import React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 //import for types
 import type { DynamicFormProps } from "@/types/form_data.type";
+import type { Response } from "@prisma/client";
 
 //import for utils
 import { api } from "@/utils/api";
@@ -33,14 +34,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
         return true;
     }
 
-    const parsedResponsesData = responsesData ? responsesData.map(response => ({
+    const parsedResponsesData = responsesData ? responsesData.map((response: Response) => ({
         ...response,
         value: response.value !== null && isJsonParsable(response.value) ?
             JSON.parse(response.value) : response.value,
     })) : [];
 
-    const defaultValues = parsedResponsesData.reduce((acc: Record<string, string | number | string[] | undefined>, response) => {
-        acc[response.questionId] = response.value;
+    const defaultValues = parsedResponsesData.reduce((acc: Record<string, string | number | string[] | undefined>, response: Response) => {
+        if (response.value !== null) {
+            acc[response.questionId] = response.value;
+        }
         return acc;
     }, {});
 

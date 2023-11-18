@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -21,28 +21,9 @@ import { Input } from "@/components/ui/input"
 
 //import for types
 import { newFormSchema } from "@/validators/form_schema.type";
-import { FormInfoInputType, DialogContextProps } from "@/types/form_data.type";
+import type { FormInfoInputType, DialogContextProps } from "@/types/form_data.type";
 
 const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo, setDialogOpen, setFormInfo, onSubmit }) => {
-
-    useEffect(() => {
-        console.log("formInfo", formInfo);
-    }, [formInfo])
-
-
-    let defaultFormInfo: { name: string; description: string | undefined } = {
-        name: "",
-        description: "" || undefined,
-    };
-
-    if (formInfo) {
-        defaultFormInfo = {
-            name: formInfo.name,
-            description: formInfo.description || undefined,
-        };
-    }
-
-
 
     const form = useForm<FormInfoInputType>({
         resolver: zodResolver(newFormSchema),
