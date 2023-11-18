@@ -1,4 +1,5 @@
-import { FormQuestionType } from "@/types/form_data.type";
+//import for Prisma types
+import { Question } from "@prisma/client";
 
 // Zod imports
 import { z } from "zod";
@@ -9,7 +10,7 @@ import type { InputType } from "@/schemas/dynamicFormInputs";
  * createDynamicSchema creates a z.object schema that is meant to be passed
  * into useForm's zodResolver.
  */
-const createDynamicSchema = (formData: FormQuestionType[]) => {
+const createDynamicSchema = (formData: Question[]) => {
   const schemaObject: Record<string, (typeof dynamicSchema)[InputType]> = {};
 
   formData.forEach((question) => {
@@ -18,7 +19,5 @@ const createDynamicSchema = (formData: FormQuestionType[]) => {
 
   return z.object(schemaObject);
 };
-
-export type DynamicSchemaType = z.infer<ReturnType<typeof createDynamicSchema>>;
 
 export default createDynamicSchema;

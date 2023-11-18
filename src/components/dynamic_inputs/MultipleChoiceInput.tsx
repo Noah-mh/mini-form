@@ -14,6 +14,7 @@ const MultipleChoiceInput: React.FC<DynamicInputProps> = ({ control, question })
     return (
         <>
             <FormField
+                key={question.id}
                 control={control}
                 name={question.id}
                 render={({ field }) => (

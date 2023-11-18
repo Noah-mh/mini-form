@@ -13,19 +13,12 @@ import {
 
 
 //import for types
-import { FormQuestionType } from '@/types/form_data.type';
-import { DynamicSchemaType } from '@/utils/createDynamicSchema';
-import { Control } from 'react-hook-form';
+import { DynamicInputProps } from '@/types/form_data.type';
 import type { ComponentProps } from "react"
 
-interface DropdownInputProps {
-    question: FormQuestionType,
-    control: Control<DynamicSchemaType>
-}
-
-
-const DropdownInput: React.FC<DropdownInputProps> = ({ control, question }) => (
+const DropdownInput: React.FC<DynamicInputProps> = ({ control, question }) => (
     <FormField
+        key={question.id}
         control={control}
         name={question.id}
         render={({ field }) => (

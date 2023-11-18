@@ -10,12 +10,11 @@ import { DynamicInputProps } from '@/types/form_data.type';
 import type { ComponentProps } from "react"
 import { FileUpload } from '../FileUpload';
 
-const ImageInput: React.FC<DynamicInputProps> = ({ control, question, placeholder }) => (
+const ImageInput: React.FC<DynamicInputProps> = ({ control, question }) => (
     <FormField key={question.id} control={control} name={question.id}
         render={({ field }) => (
             <FormItem>
                 <FormLabel>{question.text}</FormLabel>
-
                 <FormControl>
                     <FileUpload endpoint="imageUpload" value={field.value as unknown as string} onChange={field.onChange} />
                 </FormControl>

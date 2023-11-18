@@ -31,7 +31,7 @@ const dynamicSchema = {
       message: "Invalid phone number",
     }),
 
-  FILE_INPUT: z.string().optional(),
+  FILE_INPUT: z.string().optional().nullable(),
 
   MULTIPLE_CHOICE: z.enum(["all", "mentions", "none"], {
     required_error: "You need to select a notification type.",
@@ -47,15 +47,20 @@ const dynamicSchema = {
     })
     .email(),
 
-  DATE: z.date({
-    required_error: "A date of birth is required.",
+  DATE: z.string({
+    required_error: "date is required.",
   }),
 
   TIME: z.string().min(1, {
     message: "Value is required",
   }),
 
-  LINEAR_SCALE: z.number().min(1).max(5),
+  LINEAR_SCALE: z
+    .string({
+      required_error: "Rating is required",
+    })
+    .min(1)
+    .max(5),
 } as const;
 
 export default dynamicSchema;

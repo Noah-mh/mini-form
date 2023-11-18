@@ -24,15 +24,15 @@ import { DynamicInputProps } from "@/types/form_data.type"
 
 
 const DatePickerInput: React.FC<DynamicInputProps> = ({ control, question }) => {
-
     return (
 
         <FormField
+            key={question.id}
             control={control}
             name={question.id}
             render={({ field }) => (
                 <FormItem className="flex flex-col">
-                    <FormLabel>Date of birth</FormLabel>
+                    <FormLabel>{question.text}</FormLabel>
                     <Popover>
                         <PopoverTrigger asChild>
                             <FormControl>
@@ -44,7 +44,7 @@ const DatePickerInput: React.FC<DynamicInputProps> = ({ control, question }) => 
                                     )}
                                 >
                                     {field.value ? (
-                                        format(field.value as unknown as number | Date, "PPP")
+                                        format(new Date(field.value as unknown as number | Date), "PPP")
                                     ) : (
                                         <span>Pick a date</span>
                                     )}
@@ -56,17 +56,15 @@ const DatePickerInput: React.FC<DynamicInputProps> = ({ control, question }) => 
                             <Calendar
                                 mode="single"
                                 selected={field.value as unknown as Date}
-                                onSelect={field.onChange}
-                                disabled={(date) =>
-                                    date > new Date() || date < new Date("1900-01-01")
-                                }
+                                onSelect={(date) => {
+                                    if (date) {
+                                        field.onChange(date.toISOString());
+                                    }
+                                }}
                                 initialFocus
                             />
                         </PopoverContent>
                     </Popover>
-                    <FormDescription>
-                        Your date of birth is used to calculate your age.
-                    </FormDescription>
                     <FormMessage />
                 </FormItem>
             )}

@@ -29,6 +29,23 @@ export const formRouter = createTRPCRouter({
         },
       });
     }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1),
+        description: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.form.update({
+        where: { id: input.id },
+        data: {
+          name: input.name,
+          description: input.description,
+        },
+      });
+    }),
   bulkCreateQuestion: protectedProcedure
     .input(
       z.object({

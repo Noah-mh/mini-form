@@ -2,6 +2,7 @@ import { postRouter } from "@/server/api/routers/post";
 import { formRouter } from "@/server/api/routers/form";
 import { formDetailsRouter } from "@/server/api/routers/form_details";
 import { createTRPCRouter } from "@/server/api/trpc";
+import { responseRouter } from "./routers/response";
 
 /**
  * This is the primary router for your server.
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   post: postRouter,
   form: formRouter,
   formDetails: formDetailsRouter,
+  response: responseRouter,
 });
 
 // export type definition of API

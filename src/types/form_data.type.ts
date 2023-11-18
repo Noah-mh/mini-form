@@ -1,17 +1,28 @@
 import { z } from "zod";
-import { RouterOutputs } from "@/utils/api";
 import { newFormSchema } from "@/validators/form_schema.type";
 import { Control } from "react-hook-form";
-import { DynamicSchemaType } from "@/utils/createDynamicSchema";
+import createDynamicSchema from "@/utils/createDynamicSchema";
+import { Form, Question, Response } from "@prisma/client";
 
 //input type for creating a new form
-export type FormInputType = z.infer<typeof newFormSchema>;
+export type FormInfoInputType = z.infer<typeof newFormSchema>;
 
 //input type for submitting a response to a form
 
 //
 export type NewFormProps = {
-  onSubmit: (values: FormInputType) => void | Promise<void>;
+  onSubmit: (values: FormInfoInputType) => void | Promise<void>;
+};
+
+export type DialogContextProps = {
+  label?: string;
+  formInfo?: Form;
+  isDialogOpen: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onSubmit: (
+    values: FormInfoInputType,
+    formId?: string,
+  ) => void | Promise<void>;
 };
 
 //
@@ -21,18 +32,15 @@ export type FormDetailsProps = {
 
 //
 export type DynamicFormProps = {
-  formData: FormQuestionType[];
+  questionsData: Question[];
+  responsesData: Response[];
 };
-
-//type for the question info
-export type FormQuestionType = RouterOutputs["formDetails"]["getOne"][0];
-
-//type for the form info
-export type FormType = RouterOutputs["form"]["getAll"][0];
 
 //type for the different inputs
 export type DynamicInputProps = {
-  question: FormQuestionType;
+  question: Question;
   control: Control<DynamicSchemaType>;
   placeholder?: string;
 };
+
+export type DynamicSchemaType = z.infer<ReturnType<typeof createDynamicSchema>>;

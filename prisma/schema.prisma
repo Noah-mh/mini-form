@@ -52,7 +52,9 @@ model Response {
     question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
     formId     String
     form       Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
-    value      Json
+    value      String?
+
+    @@index([questionId, formId])
 }
 
 enum QuestionType {

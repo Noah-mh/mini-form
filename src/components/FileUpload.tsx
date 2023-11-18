@@ -13,14 +13,16 @@ type FileUploadProps = {
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({ endpoint, value, onChange }) => {
-    if (value) {
+    const fileType = value?.split(".").pop();
+    if (value && fileType !== "pdf") {
         return (
             <div className="relative h-20 w-20">
                 <Image
-                    fill
                     src={value}
                     alt="Upload"
-                    className="rounded-full"
+                    className="rounded-full object-cover w-auto h-auto"
+                    width={500}
+                    height={500}
                 />
                 <button
                     onClick={() => onChange("")}

@@ -9,14 +9,17 @@ import { Input } from '@/components/ui/input';
 import { DynamicInputProps } from '@/types/form_data.type';
 import type { ComponentProps } from "react"
 
-const TimeInput: React.FC<DynamicInputProps> = ({ control, question, placeholder }) => (
+const TimeInput: React.FC<DynamicInputProps> = ({ control, question }) => (
     <FormField key={question.id} control={control} name={question.id}
         render={({ field }) => (
             <FormItem>
                 <FormLabel>{question.text}</FormLabel>
 
                 <FormControl>
-                    <p> Time Input</p>
+                    <Input type="time"
+                        {...field}
+                        value={field.value as unknown as ComponentProps<typeof Input>["value"]}
+                    />
                 </FormControl>
                 <FormMessage />
             </FormItem>

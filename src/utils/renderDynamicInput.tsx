@@ -3,8 +3,10 @@
 import type { Control } from "react-hook-form";
 
 //import for types
-import type { DynamicSchemaType } from "./createDynamicSchema";
-import type { FormQuestionType } from "@/types/form_data.type";
+import type { DynamicSchemaType } from "@/types/form_data.type";
+
+//import for Prisma types
+import type { Question } from "@prisma/client";
 
 //import for components
 import TextInput from "@/components/dynamic_inputs/TextInput"
@@ -14,10 +16,11 @@ import MultipleChoiceInput from "@/components/dynamic_inputs/MultipleChoiceInput
 import DatePickerInput from "@/components/dynamic_inputs/DatePickerInput";
 import ImageInput from "@/components/dynamic_inputs/ImageInput";
 import TimeInput from "@/components/dynamic_inputs/TimeInput";
+import LinearScaleInput from "@/components/dynamic_inputs/LinearScaleInput";
 
 
 const renderDynamicInput = (
-  question: FormQuestionType,
+  question: Question,
   control: Control<DynamicSchemaType>,
 ) => {
   switch (question.type) {
@@ -47,6 +50,9 @@ const renderDynamicInput = (
     }
     case "TIME": {
       return <TimeInput question={question} control={control} />
+    }
+    case "LINEAR_SCALE": {
+      return <LinearScaleInput question={question} control={control} />
     }
 
   }
