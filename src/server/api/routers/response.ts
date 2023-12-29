@@ -2,14 +2,14 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-export const responseRouter = createTRPCRouter({
+const responseRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.response.findMany();
+    return ctx.db.response.findMany();
   }),
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.response.findMany({
+      return ctx.db.response.findMany({
         where: { formId: input.id },
       });
     }),
@@ -26,7 +26,7 @@ export const responseRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.response.createMany({
+      return ctx.db.response.createMany({
         data: input.responses,
       });
     }),
@@ -53,3 +53,5 @@ export const responseRouter = createTRPCRouter({
       return updatedResponses;
     }),
 });
+
+export default responseRouter;

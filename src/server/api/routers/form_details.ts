@@ -1,13 +1,13 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { QuestionType } from "@prisma/client";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 export const formDetailsRouter = createTRPCRouter({
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.question.findMany({
+      return ctx.db.question.findMany({
         where: { formId: input.id },
       });
     }),
@@ -20,7 +20,7 @@ export const formDetailsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.question.create({
+      return ctx.db.question.create({
         data: {
           text: input.text,
           type: input.type,
@@ -29,3 +29,5 @@ export const formDetailsRouter = createTRPCRouter({
       });
     }),
 });
+
+export default formDetailsRouter;

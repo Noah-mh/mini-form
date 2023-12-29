@@ -1,14 +1,15 @@
 
-//import for library
+// import for library
 import type { Control } from "react-hook-form";
-
-//import for types
-import type { DynamicSchemaType } from "@/types/form_data.type";
-
-//import for Prisma types
 import type { Question } from "@prisma/client";
 
-//import for components
+// import for types
+import type { DynamicSchemaType } from "@/types/form_data.type";
+
+// import for Prisma types
+
+
+// import for components
 import TextInput from "@/components/dynamic_inputs/TextInput"
 import CheckboxInput from "@/components/dynamic_inputs/CheckboxInput";
 import DropdownInput from "@/components/dynamic_inputs/DropdownInput";
@@ -25,13 +26,13 @@ const renderDynamicInput = (
 ) => {
   switch (question.type) {
     case "TEXT": {
-      return <TextInput question={question} control={control} placeholder={"John"} />
+      return <TextInput question={question} control={control} placeholder="John" />
     }
     case "PHONE_NUMBER": {
-      return <TextInput question={question} control={control} placeholder={"88888888"} />
+      return <TextInput question={question} control={control} placeholder="88888888" />
     }
     case "EMAIL": {
-      return <TextInput question={question} control={control} placeholder={"example@gmail.com"} />
+      return <TextInput question={question} control={control} placeholder="example@gmail.com" />
     }
     case "FILE_INPUT": {
       return <ImageInput question={question} control={control} />
@@ -54,6 +55,8 @@ const renderDynamicInput = (
     case "LINEAR_SCALE": {
       return <LinearScaleInput question={question} control={control} />
     }
+    default:
+      return null;
 
   }
 };

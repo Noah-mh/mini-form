@@ -1,7 +1,7 @@
-//import for icon
+// import for icon
 import { CalendarIcon } from "@radix-ui/react-icons"
 
-//import for library
+// import for library
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -36,7 +36,7 @@ const DatePickerInput: React.FC<DynamicInputProps> = ({ control, question }) => 
                         <PopoverTrigger asChild>
                             <FormControl>
                                 <Button
-                                    variant={"outline"}
+                                    variant="outline"
                                     className={cn(
                                         "w-[240px] pl-3 text-left font-normal",
                                         !field.value && "text-muted-foreground"

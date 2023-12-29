@@ -1,13 +1,13 @@
 import React from "react";
 import Image from "next/image";
 
-//import for icons
+// import for icons
 import { X } from "lucide-react";
 
-//import for components
+// import for components
 import { UploadDropzone } from "@/utils/uploadthing";
 
-//import for styles
+// import for styles
 import "@uploadthing/react/styles.css";
 
 type FileUploadProps = {
@@ -32,6 +32,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ endpoint, value, onChange }) =>
                     onClick={() => onChange("")}
                     className="bg-rose-500 text-white p-1 rounded-full absolute top-0 right-0 shadow-sm"
                     type="button"
+                    aria-label="Remove image"
                 >
                     <X className="h-4 w-4" />
                 </button>

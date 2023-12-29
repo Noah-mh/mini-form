@@ -1,13 +1,13 @@
 import type { z } from "zod";
-import type { newFormSchema } from "@/validators/form_schema.type";
 import type { Control } from "react-hook-form";
-import type createDynamicSchema from "@/utils/createDynamicSchema";
 import type { Form, Question, Response } from "@prisma/client";
+import type newFormSchema from "@/validators/form_schema.type";
+import type createDynamicSchema from "@/utils/createDynamicSchema";
 
-//input type for creating a new form
+// input type for creating a new form
 export type FormInfoInputType = z.infer<typeof newFormSchema>;
 
-//input type for submitting a response to a form
+// input type for submitting a response to a form
 
 //
 export type NewFormProps = {
@@ -36,7 +36,7 @@ export type DynamicFormProps = {
   responsesData: Response[];
 };
 
-//type for the different inputs
+// type for the different inputs
 export type DynamicInputProps = {
   question: Question;
   control: Control<DynamicSchemaType>;

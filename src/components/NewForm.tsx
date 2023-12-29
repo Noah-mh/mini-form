@@ -1,7 +1,10 @@
-//import for library
+// import for library
 import React, { useState } from "react"
 
-//import for ui
+// import from Prisma
+import type { Form } from "@prisma/client";
+
+// import for ui
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -12,15 +15,15 @@ import {
     CardContent,
 } from "@/components/ui/card"
 
-//import for components
+// import for components
 import DiaLogContentFC from "@/components/DialogContentFC";
 
-//import for types
+// import for types
 import type { NewFormProps } from "@/types/form_data.type";
-import type { Form } from "@prisma/client";
 
 
-export const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
+
+const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [formInfo, setFormInfo] = useState<Form | undefined>(undefined);
 
@@ -43,3 +46,4 @@ export const NewForm: React.FC<NewFormProps> = ({ onSubmit }) => {
         </div>
     )
 }
+export default NewForm;

@@ -1,13 +1,13 @@
-//import for library
+// import for library
 import React from 'react';
-
-//import for ui
+import type { ComponentProps } from "react"
+// import for ui
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
-//import for types
+// import for types
 import type { DynamicInputProps } from '@/types/form_data.type';
-import type { ComponentProps } from "react"
+
 
 const TextInput: React.FC<DynamicInputProps> = ({ control, question, placeholder }) => (
     <FormField key={question.id} control={control} name={question.id}

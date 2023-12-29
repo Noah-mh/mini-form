@@ -2,7 +2,7 @@ import React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-//import for ui
+// import for ui
 import { Button } from "@/components/ui/button"
 import {
     DialogContent,
@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 
-//import for types
-import { newFormSchema } from "@/validators/form_schema.type";
+// placeholder={formInfo && formInfo.description ? formInfo.description : "Please enter the description of the form"}import for types
+import newFormSchema from "@/validators/form_schema.type";
 import type { FormInfoInputType, DialogContextProps } from "@/types/form_data.type";
 
 const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo, setDialogOpen, setFormInfo, onSubmit }) => {
@@ -81,7 +81,7 @@ const DiaLogContentFC: React.FC<DialogContextProps> = ({ label, formInfo, setDia
                             <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <FormControl>
-                                    <Input placeholder={formInfo ? (formInfo.description !== null && formInfo.description !== "" ? formInfo.description : "Please enter the description of the form") : "Please enter the description of the form"} {...field} />
+                                    <Input placeholder={formInfo?.description ? formInfo.description : "Please enter the description of the form"} {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

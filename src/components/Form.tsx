@@ -1,10 +1,11 @@
-//import for library
+// import for library
 import React, { useEffect, useState } from "react"
 import { useSession } from "next-auth/react";
-import { api } from "@/utils/api";
 import Link from "next/link";
+import { type Form, QuestionType } from "@prisma/client";
+import { api } from "@/utils/api";
 
-//import for ui
+// import for ui
 import {
     Card,
     CardContent,
@@ -26,12 +27,11 @@ import {
 } from "@/components/ui/dialog"
 
 
-//import for components
-import { NewForm } from "@/components/NewForm";
+// import for components
+import NewForm from "@/components/NewForm";
 import DiaLogContentFC from "@/components/DialogContentFC";
 
-//import for types
-import { type Form, QuestionType } from "@prisma/client";
+// import for types
 import type { FormInfoInputType } from "@/types/form_data.type";
 
 
@@ -155,7 +155,7 @@ const Forms = () => {
         event.preventDefault();
         console.log("deleting form")
         try {
-            await deleteForm.mutateAsync({ id: id });
+            await deleteForm.mutateAsync({ id });
             toast({
                 title: "Form Deleted",
             })
@@ -182,12 +182,12 @@ const Forms = () => {
 
     return (
         <div className="mx-4 flex flex-wrap p-4">
-            {forms?.length == 0 ? (
+            {forms?.length === 0 ? (
                 <NewForm onSubmit={onSubmit} />
             ) : (
                 <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                    {forms?.map((form, index) => (
-                        <ContextMenu key={index}>
+                    {forms?.map((form) => (
+                        <ContextMenu key={form.id}>
 
                             <ContextMenuTrigger asChild>
                                 <Link href={{
@@ -200,7 +200,7 @@ const Forms = () => {
                                             <CardDescription>{form.description}</CardDescription>
                                         </CardHeader>
                                         <CardContent>
-                                            <p className="text-sm">Last Updated : <br></br>{form.updatedAt.toLocaleString()}</p>
+                                            <p className="text-sm">Last Updated : <br />{form.updatedAt.toLocaleString()}</p>
                                         </CardContent>
                                     </Card>
                                 </Link>

@@ -1,4 +1,4 @@
-//import for Prisma types
+// import for Prisma types
 import type { Question } from "@prisma/client";
 
 // Zod imports

@@ -1,21 +1,22 @@
-//import for library
+// import for library
 import type { z } from "zod";
 import React from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-//import for ui
+import type { Response } from "@prisma/client";
+// import for ui
 import { Button } from "@/components/ui/button"
 import {
     Form,
 } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast";
 
-//import for types
+// mport for types
 import type { DynamicFormProps } from "@/types/form_data.type";
-import type { Response } from "@prisma/client";
 
-//import for utils
+
+// import for utils
 import { api } from "@/utils/api";
 import createDynamicSchema from "@/utils/createDynamicSchema";
 import renderDynamicInput from "@/utils/renderDynamicInput";
@@ -36,6 +37,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
 
     const parsedResponsesData = responsesData ? responsesData.map((response: Response) => ({
         ...response,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         value: response.value !== null && isJsonParsable(response.value) ?
             JSON.parse(response.value) : response.value,
     })) : [];
@@ -51,7 +53,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
 
     const form = useForm<z.infer<typeof dynamicSchema>>({
         resolver: zodResolver(dynamicSchema),
-        defaultValues: defaultValues,
+        defaultValues,
     })
 
     const createResponse = api.response.createResponse.useMutation({
@@ -89,12 +91,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
         const arrayOfResponse = Object.entries(values).map(([questionId, value]) => (
             {
                 questionId,
-                value: value === undefined ? null : (typeof value === "string" ? value : JSON.stringify(value)),
+                value: value === undefined ? null : (typeof value === "string" || JSON.stringify(value)),
             }));
 
         const arrayOfResponseWithFormId = arrayOfResponse.map((response) => ({
             ...response,
             formId: questionsData[0]!.formId,
+            value: response.value === true ? null : response.value,
         }));
 
         console.log(arrayOfResponseWithFormId);
@@ -105,7 +108,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ questionsData, responsesData 
                 });
             } else {
                 await updateResponse.mutateAsync({
-                    responses: arrayOfResponse,
+                    responses: arrayOfResponse.map(response => ({
+                        ...response,
+                        value: response.value === true ? null : response.value,
+                    })),
                 });
             }
         } catch (error) {

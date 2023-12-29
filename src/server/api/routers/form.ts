@@ -1,18 +1,18 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { QuestionType } from "@prisma/client";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-export const formRouter = createTRPCRouter({
+const formRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.form.findMany({
+    return ctx.db.form.findMany({
       where: { createdById: ctx.session.user.id },
     });
   }),
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.form.findUnique({
+      return ctx.db.form.findUnique({
         where: { id: input.id },
       });
     }),
@@ -21,7 +21,7 @@ export const formRouter = createTRPCRouter({
       z.object({ name: z.string().min(1), description: z.string().optional() }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.form.create({
+      return ctx.db.form.create({
         data: {
           name: input.name,
           description: input.description,
@@ -38,7 +38,7 @@ export const formRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.form.update({
+      return ctx.db.form.update({
         where: { id: input.id },
         data: {
           name: input.name,
@@ -59,15 +59,17 @@ export const formRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.question.createMany({
+      return ctx.db.question.createMany({
         data: input.questions,
       });
     }),
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.form.delete({
+      return ctx.db.form.delete({
         where: { id: input.id },
       });
     }),
 });
+
+export default formRouter;

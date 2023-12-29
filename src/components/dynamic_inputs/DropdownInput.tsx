@@ -1,7 +1,7 @@
-//import for library
+// import for library
 import React from 'react';
-
-//import for ui
+import type { ComponentProps } from "react"
+// import for ui
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import {
     Select,
@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/select"
 
 
-//import for types
+// import for types
 import type { DynamicInputProps } from '@/types/form_data.type';
-import type { ComponentProps } from "react"
+
 
 const DropdownInput: React.FC<DynamicInputProps> = ({ control, question }) => (
     <FormField

@@ -1,11 +1,11 @@
-//import for library
+// import for library
 import Head from "next/head";
 
-//import for components
+// import for components
 import Header from "@/components/Header";
 import Forms from "@/components/Form";
 
-export default function Home() {
+const Home = () => {
 
   return (
     <>
@@ -21,3 +21,4 @@ export default function Home() {
     </>
   );
 }
+export default Home;
